@@ -42,7 +42,7 @@ export async function fetchLatestInvoices() {
       LIMIT 5`;
 
     const latestInvoices = data.rows.map((invoice) => ({
-      ...invoice,
+      ...invoice, // spread operator, expands the elements of an iterable (invoice dict e amount ekliyor)
       amount: formatCurrency(invoice.amount),
     }));
     return latestInvoices;
@@ -64,6 +64,8 @@ export async function fetchCardData() {
          SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
          FROM invoices`;
 
+    
+    // Promise helps with fetching data simultaneously
     const data = await Promise.all([
       invoiceCountPromise,
       customerCountPromise,
